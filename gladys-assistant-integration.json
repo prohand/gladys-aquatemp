@@ -1,0 +1,692 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Aqua Temp",
+  "description": {
+    "en": "Control your Aqua Temp heat pumps (pool, Phnix, Hi Temp) through the Aqua Temp cloud.",
+    "fr": "Pilotez vos pompes à chaleur Aqua Temp (piscine, Phnix, Hi Temp) via le cloud Aqua Temp.",
+    "de": "Steuere deine Aqua-Temp-Wärmepumpen (Pool, Phnix, Hi Temp) über die Aqua-Temp-Cloud.",
+    "es": "Controle sus bombas de calor Aqua Temp (piscina, Phnix, Hi Temp) desde la nube Aqua Temp."
+  },
+  "version": "0.0.0",
+  "docker_image": "ghcr.io/prohand/gladys-aquatemp:0.0.0",
+  "gladys_version": ">=5.3.0",
+  "cover_image": "https://raw.githubusercontent.com/prohand/gladys-aquatemp/main/cover.png",
+  "categories": ["climate", "leisure"],
+  "keywords": [
+    "aquatemp",
+    "aqua temp",
+    "phnix",
+    "hi temp",
+    "linked-go",
+    "heat pump",
+    "pompe à chaleur",
+    "wärmepumpe",
+    "bomba de calor",
+    "pompe piscine"
+  ],
+  "countries": [
+    "FR",
+    "BE",
+    "CH",
+    "LU",
+    "MC",
+    "DE",
+    "AT",
+    "ES",
+    "PT",
+    "IT",
+    "NL",
+    "GB",
+    "IE",
+    "PL",
+    "CZ",
+    "SE",
+    "DK",
+    "AU",
+    "US",
+    "CA"
+  ],
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Getting started",
+        "fr": "Pour commencer",
+        "de": "Erste Schritte",
+        "es": "Primeros pasos"
+      },
+      "description": {
+        "en": "Use the account of the Aqua Temp mobile app: its e-mail and password. The heat pumps of the account, and those shared with it, appear in Gladys. Tip: the app keeps one session per account, so create a second account, share your heat pump with it in the app, and enter that one here.",
+        "fr": "Utilisez le compte de l'application mobile Aqua Temp : son e-mail et son mot de passe. Les pompes à chaleur du compte, et celles partagées avec lui, apparaissent dans Gladys. Astuce : l'application ne garde qu'une session par compte. Créez un second compte, partagez-lui votre pompe depuis l'application, et saisissez-le ici.",
+        "de": "Verwende das Konto der Aqua-Temp-App: seine E-Mail-Adresse und sein Passwort. Die Wärmepumpen des Kontos und die mit ihm geteilten erscheinen in Gladys. Tipp: Die App hält nur eine Sitzung pro Konto. Lege ein zweites Konto an, teile deine Wärmepumpe in der App mit ihm und gib es hier ein.",
+        "es": "Utilice la cuenta de la aplicación móvil Aqua Temp: su correo y su contraseña. Las bombas de calor de la cuenta, y las compartidas con ella, aparecen en Gladys. Consejo: la aplicación solo mantiene una sesión por cuenta. Cree una segunda cuenta, comparta su bomba con ella desde la aplicación e introdúzcala aquí."
+      },
+      "links": [
+        {
+          "url": "https://github.com/prohand/gladys-aquatemp/blob/main/docs/en.md",
+          "label": {
+            "en": "Documentation",
+            "fr": "Documentation",
+            "de": "Dokumentation",
+            "es": "Documentación"
+          }
+        }
+      ]
+    },
+    {
+      "key": "username",
+      "type": "string",
+      "label": {
+        "en": "E-mail",
+        "fr": "E-mail",
+        "de": "E-Mail",
+        "es": "Correo electrónico"
+      },
+      "description": {
+        "en": "The e-mail you log in to the Aqua Temp app with.",
+        "fr": "L'e-mail avec lequel vous vous connectez à l'application Aqua Temp.",
+        "de": "Die E-Mail-Adresse, mit der du dich in der Aqua-Temp-App anmeldest.",
+        "es": "El correo con el que inicia sesión en la aplicación Aqua Temp."
+      },
+      "placeholder": {
+        "en": "e.g. me@example.com",
+        "fr": "ex. moi@exemple.fr",
+        "de": "z. B. ich@beispiel.de",
+        "es": "p. ej. yo@ejemplo.es"
+      },
+      "required": true
+    },
+    {
+      "key": "password",
+      "type": "secret",
+      "label": {
+        "en": "Password",
+        "fr": "Mot de passe",
+        "de": "Passwort",
+        "es": "Contraseña"
+      },
+      "required": true
+    },
+    {
+      "key": "api_type",
+      "type": "select",
+      "label": {
+        "en": "Account type",
+        "fr": "Type de compte",
+        "de": "Kontotyp",
+        "es": "Tipo de cuenta"
+      },
+      "description": {
+        "en": "Where the account was created. Pick \"Aqua Temp (app 1.5.8 or older)\" only if the login is refused with the default.",
+        "fr": "Où le compte a été créé. Choisissez « Aqua Temp (appli 1.5.8 ou plus ancienne) » seulement si la connexion est refusée avec le choix par défaut.",
+        "de": "Wo das Konto angelegt wurde. Wähle „Aqua Temp (App 1.5.8 oder älter)“ nur, wenn die Anmeldung mit der Voreinstellung abgelehnt wird.",
+        "es": "Dónde se creó la cuenta. Elija «Aqua Temp (app 1.5.8 o anterior)» solo si el inicio de sesión se rechaza con la opción por defecto."
+      },
+      "required": false,
+      "default": "aqua_temp",
+      "options": [
+        {
+          "value": "aqua_temp",
+          "label": {
+            "en": "Aqua Temp",
+            "fr": "Aqua Temp",
+            "de": "Aqua Temp",
+            "es": "Aqua Temp"
+          }
+        },
+        {
+          "value": "hi_temp",
+          "label": {
+            "en": "Hi Temp",
+            "fr": "Hi Temp",
+            "de": "Hi Temp",
+            "es": "Hi Temp"
+          }
+        },
+        {
+          "value": "aqua_temp_legacy",
+          "label": {
+            "en": "Aqua Temp (app 1.5.8 or older)",
+            "fr": "Aqua Temp (appli 1.5.8 ou plus ancienne)",
+            "de": "Aqua Temp (App 1.5.8 oder älter)",
+            "es": "Aqua Temp (app 1.5.8 o anterior)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "poll_frequency",
+      "type": "number",
+      "label": {
+        "en": "Refresh interval (s)",
+        "fr": "Intervalle de rafraîchissement (s)",
+        "de": "Aktualisierungsintervall (s)",
+        "es": "Intervalo de actualización (s)"
+      },
+      "description": {
+        "en": "How often each heat pump is read from the cloud, in seconds (one minute minimum).",
+        "fr": "Fréquence de lecture de chaque pompe dans le cloud, en secondes (une minute minimum).",
+        "de": "Wie oft jede Wärmepumpe aus der Cloud gelesen wird, in Sekunden (mindestens eine Minute).",
+        "es": "Cada cuánto se lee cada bomba en la nube, en segundos (mínimo un minuto)."
+      },
+      "required": false,
+      "default": 60,
+      "min": 60,
+      "max": 3600
+    },
+    {
+      "key": "strict_tls",
+      "type": "boolean",
+      "label": {
+        "en": "Check the cloud certificate",
+        "fr": "Vérifier le certificat du cloud",
+        "de": "Zertifikat der Cloud prüfen",
+        "es": "Comprobar el certificado de la nube"
+      },
+      "description": {
+        "en": "Keep it on. Turn it off only if the connection test reports a refused certificate.",
+        "fr": "Laissez activé. Désactivez seulement si le test de connexion signale un certificat refusé.",
+        "de": "Eingeschaltet lassen. Nur ausschalten, wenn der Verbindungstest ein abgelehntes Zertifikat meldet.",
+        "es": "Déjelo activado. Desactívelo solo si la prueba de conexión indica un certificado rechazado."
+      },
+      "required": false,
+      "default": true
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "timeout_seconds": 30
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "fault_detected",
+      "label": {
+        "en": "A heat pump reports a fault",
+        "fr": "Une pompe à chaleur signale un défaut",
+        "de": "Eine Wärmepumpe meldet eine Störung",
+        "es": "Una bomba de calor indica una avería"
+      },
+      "description": {
+        "en": "The Aqua Temp cloud flags the heat pump in fault (error code on its display).",
+        "fr": "Le cloud Aqua Temp signale la pompe en défaut (code d'erreur sur son écran).",
+        "de": "Die Aqua-Temp-Cloud meldet die Wärmepumpe als gestört (Fehlercode im Display).",
+        "es": "La nube Aqua Temp marca la bomba en avería (código de error en su pantalla)."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Heat pump",
+            "fr": "Pompe à chaleur",
+            "de": "Wärmepumpe",
+            "es": "Bomba de calor"
+          },
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "device_name",
+          "type": "string",
+          "label": {
+            "en": "Heat pump name",
+            "fr": "Nom de la pompe",
+            "de": "Name der Wärmepumpe",
+            "es": "Nombre de la bomba"
+          }
+        },
+        {
+          "key": "fault",
+          "type": "string",
+          "label": {
+            "en": "Fault",
+            "fr": "Défaut",
+            "de": "Störung",
+            "es": "Avería"
+          }
+        }
+      ]
+    },
+    {
+      "key": "fault_cleared",
+      "label": {
+        "en": "A heat pump fault is cleared",
+        "fr": "Le défaut d'une pompe à chaleur disparaît",
+        "de": "Eine Störung der Wärmepumpe ist behoben",
+        "es": "Se resuelve la avería de una bomba de calor"
+      },
+      "description": {
+        "en": "The heat pump that was in fault works normally again.",
+        "fr": "La pompe qui était en défaut fonctionne de nouveau normalement.",
+        "de": "Die gestörte Wärmepumpe läuft wieder normal.",
+        "es": "La bomba que estaba en avería vuelve a funcionar con normalidad."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Heat pump",
+            "fr": "Pompe à chaleur",
+            "de": "Wärmepumpe",
+            "es": "Bomba de calor"
+          },
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "device_name",
+          "type": "string",
+          "label": {
+            "en": "Heat pump name",
+            "fr": "Nom de la pompe",
+            "de": "Name der Wärmepumpe",
+            "es": "Nombre de la bomba"
+          }
+        }
+      ]
+    },
+    {
+      "key": "connection_changed",
+      "label": {
+        "en": "A heat pump goes online or offline",
+        "fr": "Une pompe à chaleur se connecte ou se déconnecte",
+        "de": "Eine Wärmepumpe geht online oder offline",
+        "es": "Una bomba de calor se conecta o se desconecta"
+      },
+      "description": {
+        "en": "The Aqua Temp cloud lost the heat pump (Wi-Fi, power cut) or found it again.",
+        "fr": "Le cloud Aqua Temp a perdu la pompe (Wi-Fi, coupure de courant) ou l'a retrouvée.",
+        "de": "Die Aqua-Temp-Cloud hat die Wärmepumpe verloren (WLAN, Stromausfall) oder wiedergefunden.",
+        "es": "La nube Aqua Temp ha perdido la bomba (wifi, corte de luz) o la ha recuperado."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Heat pump",
+            "fr": "Pompe à chaleur",
+            "de": "Wärmepumpe",
+            "es": "Bomba de calor"
+          },
+          "required": false
+        },
+        {
+          "key": "status",
+          "type": "multi_select",
+          "label": {
+            "en": "Status",
+            "fr": "État",
+            "de": "Status",
+            "es": "Estado"
+          },
+          "options": [
+            {
+              "value": "online",
+              "label": {
+                "en": "Online",
+                "fr": "En ligne",
+                "de": "Online",
+                "es": "En línea"
+              }
+            },
+            {
+              "value": "offline",
+              "label": {
+                "en": "Offline",
+                "fr": "Hors ligne",
+                "de": "Offline",
+                "es": "Sin conexión"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "device_name",
+          "type": "string",
+          "label": {
+            "en": "Heat pump name",
+            "fr": "Nom de la pompe",
+            "de": "Name der Wärmepumpe",
+            "es": "Nombre de la bomba"
+          }
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "label": {
+            "en": "Status",
+            "fr": "État",
+            "de": "Status",
+            "es": "Estado"
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "set_mode",
+      "label": {
+        "en": "Set the heat pump mode",
+        "fr": "Changer le mode de la pompe à chaleur",
+        "de": "Modus der Wärmepumpe setzen",
+        "es": "Cambiar el modo de la bomba de calor"
+      },
+      "description": {
+        "en": "Off, heating, cooling or auto. Turns the heat pump on when needed.",
+        "fr": "Arrêt, chauffage, refroidissement ou auto. Allume la pompe si besoin.",
+        "de": "Aus, Heizen, Kühlen oder Automatik. Schaltet die Wärmepumpe bei Bedarf ein.",
+        "es": "Apagada, calefacción, refrigeración o automático. Enciende la bomba si hace falta."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Heat pump",
+            "fr": "Pompe à chaleur",
+            "de": "Wärmepumpe",
+            "es": "Bomba de calor"
+          },
+          "required": true
+        },
+        {
+          "key": "mode",
+          "type": "select",
+          "label": {
+            "en": "Mode",
+            "fr": "Mode",
+            "de": "Modus",
+            "es": "Modo"
+          },
+          "required": true,
+          "options": [
+            {
+              "value": "off",
+              "label": {
+                "en": "Off",
+                "fr": "Arrêt",
+                "de": "Aus",
+                "es": "Apagada"
+              }
+            },
+            {
+              "value": "heat",
+              "label": {
+                "en": "Heating",
+                "fr": "Chauffage",
+                "de": "Heizen",
+                "es": "Calefacción"
+              }
+            },
+            {
+              "value": "cool",
+              "label": {
+                "en": "Cooling",
+                "fr": "Refroidissement",
+                "de": "Kühlen",
+                "es": "Refrigeración"
+              }
+            },
+            {
+              "value": "auto",
+              "label": {
+                "en": "Auto",
+                "fr": "Auto",
+                "de": "Automatik",
+                "es": "Automático"
+              }
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "key": "applied",
+          "type": "boolean",
+          "label": {
+            "en": "Applied",
+            "fr": "Appliqué",
+            "de": "Übernommen",
+            "es": "Aplicado"
+          }
+        }
+      ]
+    },
+    {
+      "key": "set_silent_mode",
+      "label": {
+        "en": "Set the silent mode",
+        "fr": "Régler le mode silence",
+        "de": "Leisemodus einstellen",
+        "es": "Ajustar el modo silencio"
+      },
+      "description": {
+        "en": "Low-noise mode of the heat pump, on or off.",
+        "fr": "Mode basse vitesse de la pompe, activé ou non.",
+        "de": "Geräuscharmer Modus der Wärmepumpe, an oder aus.",
+        "es": "Modo de bajo ruido de la bomba, activado o no."
+      },
+      "timeout_seconds": 30,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Heat pump",
+            "fr": "Pompe à chaleur",
+            "de": "Wärmepumpe",
+            "es": "Bomba de calor"
+          },
+          "required": true
+        },
+        {
+          "key": "enabled",
+          "type": "boolean",
+          "label": {
+            "en": "Silent mode on",
+            "fr": "Mode silence activé",
+            "de": "Leisemodus an",
+            "es": "Modo silencio activado"
+          },
+          "required": false,
+          "default": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "applied",
+          "type": "boolean",
+          "label": {
+            "en": "Applied",
+            "fr": "Appliqué",
+            "de": "Übernommen",
+            "es": "Aplicado"
+          },
+          "description": {
+            "en": "False when this heat pump has no silent mode.",
+            "fr": "Faux si cette pompe n'a pas de mode silence.",
+            "de": "Falsch, wenn diese Wärmepumpe keinen Leisemodus hat.",
+            "es": "Falso si esta bomba no tiene modo silencio."
+          }
+        }
+      ]
+    },
+    {
+      "key": "read_status",
+      "label": {
+        "en": "Read the heat pump status",
+        "fr": "Lire l'état de la pompe à chaleur",
+        "de": "Status der Wärmepumpe lesen",
+        "es": "Leer el estado de la bomba de calor"
+      },
+      "description": {
+        "en": "Fresh read from the cloud, for the next actions and conditions.",
+        "fr": "Lecture fraîche depuis le cloud, pour les actions et conditions suivantes.",
+        "de": "Frisch aus der Cloud gelesen, für die folgenden Aktionen und Bedingungen.",
+        "es": "Lectura reciente de la nube, para las acciones y condiciones siguientes."
+      },
+      "timeout_seconds": 45,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Heat pump",
+            "fr": "Pompe à chaleur",
+            "de": "Wärmepumpe",
+            "es": "Bomba de calor"
+          },
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "key": "online",
+          "type": "boolean",
+          "label": {
+            "en": "Online",
+            "fr": "En ligne",
+            "de": "Online",
+            "es": "En línea"
+          }
+        },
+        {
+          "key": "power",
+          "type": "boolean",
+          "label": {
+            "en": "Turned on",
+            "fr": "Allumée",
+            "de": "Eingeschaltet",
+            "es": "Encendida"
+          }
+        },
+        {
+          "key": "mode",
+          "type": "string",
+          "label": {
+            "en": "Mode",
+            "fr": "Mode",
+            "de": "Modus",
+            "es": "Modo"
+          },
+          "description": {
+            "en": "off, heat, cool or auto ('' when unknown).",
+            "fr": "off, heat, cool ou auto ('' si inconnu).",
+            "de": "off, heat, cool oder auto ('' wenn unbekannt).",
+            "es": "off, heat, cool o auto ('' si se desconoce)."
+          }
+        },
+        {
+          "key": "water_temperature",
+          "type": "number",
+          "label": {
+            "en": "Water temperature (°C)",
+            "fr": "Température de l'eau (°C)",
+            "de": "Wassertemperatur (°C)",
+            "es": "Temperatura del agua (°C)"
+          },
+          "description": {
+            "en": "-1 when unknown.",
+            "fr": "-1 si inconnue.",
+            "de": "-1 wenn unbekannt.",
+            "es": "-1 si se desconoce."
+          }
+        },
+        {
+          "key": "target_temperature",
+          "type": "number",
+          "label": {
+            "en": "Setpoint (°C)",
+            "fr": "Consigne (°C)",
+            "de": "Sollwert (°C)",
+            "es": "Consigna (°C)"
+          },
+          "description": {
+            "en": "-1 when unknown.",
+            "fr": "-1 si inconnue.",
+            "de": "-1 wenn unbekannt.",
+            "es": "-1 si se desconoce."
+          }
+        },
+        {
+          "key": "in_fault",
+          "type": "boolean",
+          "label": {
+            "en": "In fault",
+            "fr": "En défaut",
+            "de": "Gestört",
+            "es": "En avería"
+          }
+        },
+        {
+          "key": "fault",
+          "type": "string",
+          "label": {
+            "en": "Fault",
+            "fr": "Défaut",
+            "de": "Störung",
+            "es": "Avería"
+          }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "heat_pump",
+      "label": {
+        "en": "Heat pump",
+        "fr": "Pompe à chaleur",
+        "de": "Wärmepumpe",
+        "es": "Bomba de calor"
+      },
+      "description": {
+        "en": "Water temperature, setpoint, mode and faults of an Aqua Temp heat pump.",
+        "fr": "Température de l'eau, consigne, mode et défauts d'une pompe Aqua Temp.",
+        "de": "Wassertemperatur, Sollwert, Modus und Störungen einer Aqua-Temp-Wärmepumpe.",
+        "es": "Temperatura del agua, consigna, modo y averías de una bomba Aqua Temp."
+      },
+      "icon": "thermometer",
+      "settings": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Heat pump",
+            "fr": "Pompe à chaleur",
+            "de": "Wärmepumpe",
+            "es": "Bomba de calor"
+          },
+          "required": false
+        }
+      ],
+      "action_timeout_seconds": 45
+    }
+  ]
+}
