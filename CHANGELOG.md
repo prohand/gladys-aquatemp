@@ -6,6 +6,8 @@ All notable changes to this integration are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.0.1] - 2026-11-23
+
 ### Added
 
 - First version of the Aqua Temp integration: heat pumps of an Aqua Temp or Hi Temp account (own

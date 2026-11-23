@@ -1,6 +1,6 @@
 {
   "name": "gladys-aquatemp",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Gladys Assistant external integration for Aqua Temp (Phnix) heat pumps, through the Aqua Temp cloud.",
   "type": "module",
